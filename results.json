@@ -1,0 +1,168 @@
+{
+  "scan_time": "2026-04-12 15:24:17",
+  "scan_date": "2026-04-12",
+  "total_scanned": 500,
+  "matched_strategy1": 6,
+  "matched_strategy2": 7,
+  "strategy1": [
+    {
+      "code": "1714",
+      "name": "和桐",
+      "price": 10.2,
+      "volume": 20426504,
+      "momentum": 0.0174,
+      "prev_mom": 0.0027,
+      "ts": 9.41,
+      "date": "2026-04-10",
+      "strategy": 1
+    },
+    {
+      "code": "3645",
+      "name": "達邁",
+      "price": 82.2,
+      "volume": 14105707,
+      "momentum": -1.0111,
+      "prev_mom": -1.1927,
+      "ts": 74.8,
+      "date": "2026-04-10",
+      "strategy": 1
+    },
+    {
+      "code": "2611",
+      "name": "志信",
+      "price": 15.15,
+      "volume": 3286041,
+      "momentum": -0.0042,
+      "prev_mom": -0.025,
+      "ts": 13.8,
+      "date": "2026-04-10",
+      "strategy": 1
+    },
+    {
+      "code": "8926",
+      "name": "台汽電",
+      "price": 44.05,
+      "volume": 2738219,
+      "momentum": -0.1429,
+      "prev_mom": -0.1601,
+      "ts": 42.7,
+      "date": "2026-04-10",
+      "strategy": 1
+    },
+    {
+      "code": "6215",
+      "name": "和椿",
+      "price": 101.0,
+      "volume": 2090343,
+      "momentum": -0.5757,
+      "prev_mom": -0.6757,
+      "ts": 94.0,
+      "date": "2026-04-10",
+      "strategy": 1
+    },
+    {
+      "code": "2387",
+      "name": "精元",
+      "price": 40.6,
+      "volume": 1795100,
+      "momentum": -0.2031,
+      "prev_mom": -0.2271,
+      "ts": 38.4,
+      "date": "2026-04-10",
+      "strategy": 1
+    }
+  ],
+  "strategy2": [
+    {
+      "code": "3031",
+      "name": "佰鴻",
+      "price": 28.35,
+      "volume": 15353373,
+      "momentum": 0.0483,
+      "prev_mom": 0.0237,
+      "prev2_mom": 0.0298,
+      "change_pct": 9.88,
+      "ts": 25.75,
+      "date": "2026-04-10",
+      "strategy": 2
+    },
+    {
+      "code": "6451",
+      "name": "訊芯-KY",
+      "price": 432.0,
+      "volume": 11977995,
+      "momentum": 2.9963,
+      "prev_mom": 2.879,
+      "prev2_mom": 3.1279,
+      "change_pct": 9.92,
+      "ts": 393.0,
+      "date": "2026-04-10",
+      "strategy": 2
+    },
+    {
+      "code": "3532",
+      "name": "台勝科",
+      "price": 165.5,
+      "volume": 5530966,
+      "momentum": 0.289,
+      "prev_mom": 0.1348,
+      "prev2_mom": 0.2452,
+      "change_pct": 9.97,
+      "ts": 150.5,
+      "date": "2026-04-10",
+      "strategy": 2
+    },
+    {
+      "code": "6426",
+      "name": "統新",
+      "price": 197.0,
+      "volume": 5388091,
+      "momentum": 1.2703,
+      "prev_mom": 1.0394,
+      "prev2_mom": 1.1097,
+      "change_pct": 9.75,
+      "ts": 179.5,
+      "date": "2026-04-10",
+      "strategy": 2
+    },
+    {
+      "code": "6442",
+      "name": "光聖",
+      "price": 2325.0,
+      "volume": 3293811,
+      "momentum": 30.1455,
+      "prev_mom": 27.229,
+      "prev2_mom": 27.8797,
+      "change_pct": 9.93,
+      "ts": 2115.0,
+      "date": "2026-04-10",
+      "strategy": 2
+    },
+    {
+      "code": "1597",
+      "name": "直得",
+      "price": 99.1,
+      "volume": 1694209,
+      "momentum": 0.4973,
+      "prev_mom": 0.4789,
+      "prev2_mom": 0.5914,
+      "change_pct": 9.99,
+      "ts": 90.1,
+      "date": "2026-04-10",
+      "strategy": 2
+    },
+    {
+      "code": "6117",
+      "name": "迎廣",
+      "price": 78.6,
+      "volume": 1009000,
+      "momentum": 0.0778,
+      "prev_mom": 0.0384,
+      "prev2_mom": 0.0906,
+      "change_pct": 9.93,
+      "ts": 71.5,
+      "date": "2026-04-10",
+      "strategy": 2
+    }
+  ]
+}
