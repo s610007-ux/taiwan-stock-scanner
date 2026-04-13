@@ -34,7 +34,7 @@ except ImportError:
 # ──────────────────────────────────────────────
 # 參數設定
 # ──────────────────────────────────────────────
-UT_BOT_ATR_PERIOD  = 1       # UT Bot ATR 週期
+UT_BOT_ATR_PERIOD  = 10      # UT Bot ATR 週期
 UT_BOT_SENSITIVITY = 1       # UT Bot 靈敏度（Key Value）
 SQUEEZE_LENGTH     = 20      # Squeeze Momentum 週期
 SQUEEZE_MULT_BB    = 2.0     # Squeeze BB 乘數
@@ -431,6 +431,26 @@ def get_tw_stock_list():
 # ──────────────────────────────────────────────
 # UT Bot Alerts（復刻 QuantNomad）
 # ──────────────────────────────────────────────
+def rma(series, period):
+    """Wilder's Moving Average（RMA），與 TradingView Pine Script 的 ta.rma() 一致"""
+    alpha = 1 / period
+    result = np.zeros(len(series))
+    result[:] = np.nan
+    # 找第一個非 NaN 的位置
+    values = series.values
+    start = 0
+    while start < len(values) and np.isnan(values[start]):
+        start += 1
+    if start >= len(values):
+        return pd.Series(result, index=series.index)
+    result[start] = values[start]
+    for i in range(start + 1, len(values)):
+        if np.isnan(values[i]):
+            result[i] = result[i-1]
+        else:
+            result[i] = alpha * values[i] + (1 - alpha) * result[i-1]
+    return pd.Series(result, index=series.index)
+
 def compute_ut_bot(df, key_value=1, atr_period=1):
     close = df["Close"]
     high  = df["High"]
@@ -440,7 +460,8 @@ def compute_ut_bot(df, key_value=1, atr_period=1):
         (high - close.shift(1)).abs(),
         (low  - close.shift(1)).abs()
     ], axis=1).max(axis=1)
-    atr    = tr.ewm(alpha=1/atr_period, adjust=False).mean()
+    # 用 RMA（Wilder's MA）與 TradingView 一致
+    atr    = rma(tr, atr_period)
     n_loss = key_value * atr
     src, nl = close.values, n_loss.values
     ts = np.zeros(len(src))
@@ -452,14 +473,54 @@ def compute_ut_bot(df, key_value=1, atr_period=1):
         elif src[i] > prev:                      ts[i] = src[i] - nl[i]
         else:                                    ts[i] = src[i] + nl[i]
     trailing_stop = pd.Series(ts, index=df.index)
-    buy_signal    = (close > trailing_stop) & (close.shift(1) <= trailing_stop.shift(1))
+
+    # 基本穿越訊號
+    cross_up   = (close > trailing_stop) & (close.shift(1) <= trailing_stop.shift(1))
+    cross_down = (close < trailing_stop) & (close.shift(1) >= trailing_stop.shift(1))
+
+    # 加入交替邏輯：Buy 前面必須有 Sell，Sell 前面必須有 Buy
+    # 用 position 追蹤：1=多頭（上穿後）, -1=空頭（下穿後）
+    pos = np.zeros(len(close))
+    for i in range(1, len(close)):
+        if cross_up.iloc[i]:
+            pos[i] = 1
+        elif cross_down.iloc[i]:
+            pos[i] = -1
+        else:
+            pos[i] = pos[i-1]
+
+    position   = pd.Series(pos, index=df.index)
+    prev_pos   = position.shift(1).fillna(0)
+
+    # Buy：向上穿越 且 前一個狀態是空頭（-1）
+    buy_signal = cross_up & (prev_pos <= 0)
+
     return buy_signal, trailing_stop
 
 
 # ──────────────────────────────────────────────
 # Squeeze Momentum（復刻 LazyBear）
 # ──────────────────────────────────────────────
+def linreg_value(series, length):
+    """
+    完全復刻 TradingView Pine Script 的 linreg(source, length, 0)
+    取線性迴歸在最後一個點的預測值（不是斜率）
+    """
+    def _linreg(x):
+        n = len(x)
+        if n < length:
+            return np.nan
+        t = np.arange(n)
+        # 線性迴歸：y = a*t + b，取 t=n-1 的預測值
+        a, b = np.polyfit(t, x, 1)
+        return a * (n - 1) + b
+    return series.rolling(length).apply(_linreg, raw=True)
+
 def compute_squeeze_momentum(df, length=20, mult_bb=2.0, mult_kc=1.5):
+    """
+    完全復刻 LazyBear Squeeze Momentum Indicator
+    使用 linreg 預測值，與 TradingView 結果一致
+    """
     close, high, low = df["Close"], df["High"], df["Low"]
     basis    = close.rolling(length).mean()
     dev      = close.rolling(length).std()
@@ -475,9 +536,8 @@ def compute_squeeze_momentum(df, length=20, mult_bb=2.0, mult_kc=1.5):
     lowest_low   = low.rolling(length).min()
     mid_hl       = (highest_high + lowest_low) / 2
     delta        = close - (mid_hl + basis) / 2
-    momentum     = delta.rolling(length).apply(
-        lambda x: np.polyfit(range(len(x)), x, 1)[0], raw=True
-    )
+    # 用 linreg 預測值，與 TradingView 一致
+    momentum = linreg_value(delta, length)
     return momentum
 
 
@@ -488,7 +548,7 @@ def analyze_stock(code, name, market=''):
     try:
         suffix = "TWO" if market == "上櫃" else "TW"
         df = yf.download(f"{code}.{suffix}", period=FETCH_PERIOD, interval="1d",
-                         progress=False, auto_adjust=True)
+                         progress=False, auto_adjust=False)
         if df is None or len(df) < 50:
             return None, None
         if isinstance(df.columns, pd.MultiIndex):
