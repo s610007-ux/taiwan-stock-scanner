@@ -229,43 +229,90 @@ BUILTIN_CODES = [
 
 
 # ──────────────────────────────────────────────
-# 抓取股票清單
+# 抓取股票清單（上市 + 上櫃合併）
 # ──────────────────────────────────────────────
+def fetch_twse():
+    """抓取上市個股成交量"""
+    url  = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL"
+    resp = requests.get(url, timeout=20, verify=False)
+    resp.raise_for_status()
+    data = resp.json()
+    tickers = []
+    for item in data:
+        code = item.get("Code", "")
+        name = item.get("Name", "")
+        if not (code.isdigit() and len(code) == 4):
+            continue
+        vol_str = item.get("TradeVolume", "0").replace(",", "")
+        try:    volume = int(vol_str)
+        except: volume = 0
+        tickers.append({"code": code, "name": name, "volume": volume, "market": "上市"})
+    return tickers
+
+def fetch_tpex():
+    """抓取上櫃個股成交量"""
+    url  = "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes"
+    resp = requests.get(url, timeout=20, verify=False)
+    resp.raise_for_status()
+    data = resp.json()
+    tickers = []
+    for item in data:
+        code = item.get("SecuritiesCompanyCode", "")
+        name = item.get("CompanyName", "")
+        if not (code.isdigit() and len(code) == 4):
+            continue
+        vol_str = item.get("TradingShares", "0").replace(",", "")
+        try:    volume = int(vol_str)
+        except: volume = 0
+        tickers.append({"code": code, "name": name, "volume": volume, "market": "上櫃"})
+    return tickers
+
 def get_tw_stock_list():
-    print(f"📋 正在抓取台灣上市股票成交量排行（前 {MAX_STOCKS} 名）...")
+    print(f"📋 正在抓取上市+上櫃成交量排行（前 {MAX_STOCKS} 名）...")
+    all_tickers = []
+
+    # 上市
     for attempt in range(2):
         try:
-            url  = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL"
-            resp = requests.get(url, timeout=20, verify=False)
-            resp.raise_for_status()
-            data = resp.json()
-            tickers = []
-            for item in data:
-                code = item.get("Code", "")
-                name = item.get("Name", "")
-                if not (code.isdigit() and len(code) == 4):
-                    continue
-                vol_str = item.get("TradeVolume", "0").replace(",", "")
-                try:    volume = int(vol_str)
-                except: volume = 0
-                tickers.append({"code": code, "name": name, "volume": volume})
+            tickers = fetch_twse()
             if len(tickers) > 100:
-                tickers.sort(key=lambda x: x["volume"], reverse=True)
-                top = tickers[:MAX_STOCKS]
-                print(f"   ✅ TWSE API 成功！最高成交量: {top[0]['code']} {top[0]['name']} ({top[0]['volume']:,} 張)")
-                return top
+                all_tickers.extend(tickers)
+                print(f"   ✅ 上市 API 成功！共 {len(tickers)} 檔")
+                break
         except Exception as e:
             if attempt == 0:
-                print(f"   ⚠️  第1次嘗試失敗，重試中... ({e})")
+                print(f"   ⚠️  上市第1次失敗，重試... ({e})")
                 time.sleep(2)
             else:
-                print(f"   ⚠️  TWSE API 無法連線，改用內建清單")
+                print(f"   ⚠️  上市 API 失敗，略過")
 
+    # 上櫃
+    for attempt in range(2):
+        try:
+            tickers = fetch_tpex()
+            if len(tickers) > 100:
+                all_tickers.extend(tickers)
+                print(f"   ✅ 上櫃 API 成功！共 {len(tickers)} 檔")
+                break
+        except Exception as e:
+            if attempt == 0:
+                print(f"   ⚠️  上櫃第1次失敗，重試... ({e})")
+                time.sleep(2)
+            else:
+                print(f"   ⚠️  上櫃 API 失敗，略過")
+
+    if len(all_tickers) > 100:
+        all_tickers.sort(key=lambda x: x["volume"], reverse=True)
+        top = all_tickers[:MAX_STOCKS]
+        print(f"   📊 合併後取前 {len(top)} 名，最高: {top[0]['code']} {top[0]['name']} ({top[0]['volume']:,} 張)")
+        return top
+
+    # 備援
     seen, unique = set(), []
     for c in BUILTIN_CODES:
         if c not in seen:
             seen.add(c)
-            unique.append({"code": c, "name": c, "volume": 0})
+            unique.append({"code": c, "name": c, "volume": 0, "market": "上市"})
     top = unique[:MAX_STOCKS]
     print(f"   ℹ️  使用內建清單，共 {len(top)} 檔")
     return top
@@ -327,7 +374,7 @@ def compute_squeeze_momentum(df, length=20, mult_bb=2.0, mult_kc=1.5):
 # ──────────────────────────────────────────────
 # 分析單一股票，同時跑兩個策略
 # ──────────────────────────────────────────────
-def analyze_stock(code, name):
+def analyze_stock(code, name, market=''):
     try:
         df = yf.download(f"{code}.TW", period=FETCH_PERIOD, interval="1d",
                          progress=False, auto_adjust=True)
@@ -370,6 +417,7 @@ def analyze_stock(code, name):
                 "prev_mom": round(mom_t1, 4),
                 "ts":       round(float(trailing_stop.iloc[-1]), 2),
                 "date":     date_str,
+                "market":   market,
                 "strategy": 1,
             }
 
@@ -419,7 +467,7 @@ def main():
         code, name = s["code"], s["name"]
         print(f"  [{i:4d}/{total}] {i/total*100:5.1f}%  {code} {name:<12}", end="\r")
 
-        r1, r2 = analyze_stock(code, name)
+        r1, r2 = analyze_stock(code, name, s.get('market', ''))
         if r1:
             res_s1.append(r1)
             print(f"\n  ✅ [策略一] {code} {name}  價格={r1['price']}  動量={r1['momentum']:.4f}")
