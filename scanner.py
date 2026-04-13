@@ -376,7 +376,8 @@ def compute_squeeze_momentum(df, length=20, mult_bb=2.0, mult_kc=1.5):
 # ──────────────────────────────────────────────
 def analyze_stock(code, name, market=''):
     try:
-        df = yf.download(f"{code}.TW", period=FETCH_PERIOD, interval="1d",
+        suffix = "TWO" if market == "上櫃" else "TW"
+        df = yf.download(f"{code}.{suffix}", period=FETCH_PERIOD, interval="1d",
                          progress=False, auto_adjust=True)
         if df is None or len(df) < 50:
             return None, None
