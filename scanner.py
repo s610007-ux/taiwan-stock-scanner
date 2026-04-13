@@ -229,10 +229,10 @@ BUILTIN_CODES = [
 
 
 # ──────────────────────────────────────────────
-# 抓取股票清單（上市 + 上櫃合併）
+# 抓取股票清單（上市 + 上櫃合併，即時成交量排行）
 # ──────────────────────────────────────────────
 def fetch_twse():
-    """抓取上市個股成交量"""
+    """抓取上市個股清單（含昨日成交量，用來確認股票存在）"""
     url  = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL"
     resp = requests.get(url, timeout=20, verify=False)
     resp.raise_for_status()
@@ -250,7 +250,7 @@ def fetch_twse():
     return tickers
 
 def fetch_tpex():
-    """抓取上櫃個股成交量"""
+    """抓取上櫃個股清單（含昨日成交量，用來確認股票存在）"""
     url  = "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes"
     resp = requests.get(url, timeout=20, verify=False)
     resp.raise_for_status()
@@ -267,8 +267,61 @@ def fetch_tpex():
         tickers.append({"code": code, "name": name, "volume": volume, "market": "上櫃"})
     return tickers
 
+def get_realtime_volume(candidates):
+    """
+    用 yfinance 批次抓今日即時成交量，重新排序。
+    candidates: list of dict，先用昨日成交量篩出的候選清單
+    """
+    print(f"   ⚡ 正在抓取即時成交量（批次下載）...")
+
+    # 建立代碼對照表
+    code_map = {}  # yahoo_symbol -> dict
+    symbols_tw  = []
+    symbols_two = []
+    for s in candidates:
+        if s["market"] == "上市":
+            sym = f"{s['code']}.TW"
+            symbols_tw.append(sym)
+        else:
+            sym = f"{s['code']}.TWO"
+            symbols_two.append(sym)
+        code_map[sym] = s
+
+    # 批次下載今日資料（1d period 最快）
+    all_symbols = symbols_tw + symbols_two
+    BATCH = 200  # 每批200檔
+    vol_today = {}
+
+    for i in range(0, len(all_symbols), BATCH):
+        batch = all_symbols[i:i+BATCH]
+        try:
+            df = yf.download(
+                batch, period="2d", interval="1d",
+                progress=False, auto_adjust=True, group_by="ticker"
+            )
+            for sym in batch:
+                try:
+                    if len(batch) == 1:
+                        v = int(df["Volume"].iloc[-1])
+                    else:
+                        v = int(df[sym]["Volume"].iloc[-1])
+                    vol_today[sym] = v
+                except Exception:
+                    vol_today[sym] = code_map[sym]["volume"]  # fallback 昨日
+        except Exception as e:
+            print(f"   ⚠️  批次下載失敗: {e}")
+            for sym in batch:
+                vol_today[sym] = code_map[sym]["volume"]
+
+    # 更新成交量並排序
+    updated = []
+    for sym, s in code_map.items():
+        updated.append({**s, "volume": vol_today.get(sym, s["volume"])})
+    updated.sort(key=lambda x: x["volume"], reverse=True)
+    return updated
+
 def get_tw_stock_list():
-    print(f"📋 正在抓取上市+上櫃成交量排行（前 {MAX_STOCKS} 名）...")
+    print(f"📋 正在抓取上市+上櫃即時成交量排行（前 {MAX_STOCKS} 名）...")
     all_tickers = []
 
     # 上市
@@ -277,7 +330,7 @@ def get_tw_stock_list():
             tickers = fetch_twse()
             if len(tickers) > 100:
                 all_tickers.extend(tickers)
-                print(f"   ✅ 上市 API 成功！共 {len(tickers)} 檔")
+                print(f"   ✅ 上市清單成功！共 {len(tickers)} 檔")
                 break
         except Exception as e:
             if attempt == 0:
@@ -292,7 +345,7 @@ def get_tw_stock_list():
             tickers = fetch_tpex()
             if len(tickers) > 100:
                 all_tickers.extend(tickers)
-                print(f"   ✅ 上櫃 API 成功！共 {len(tickers)} 檔")
+                print(f"   ✅ 上櫃清單成功！共 {len(tickers)} 檔")
                 break
         except Exception as e:
             if attempt == 0:
@@ -302,9 +355,15 @@ def get_tw_stock_list():
                 print(f"   ⚠️  上櫃 API 失敗，略過")
 
     if len(all_tickers) > 100:
+        # 先用昨日成交量取前800名候選，再抓即時成交量重新排序
         all_tickers.sort(key=lambda x: x["volume"], reverse=True)
-        top = all_tickers[:MAX_STOCKS]
-        print(f"   📊 合併後取前 {len(top)} 名，最高: {top[0]['code']} {top[0]['name']} ({top[0]['volume']:,} 張)")
+        candidates = all_tickers[:800]
+        print(f"   📋 候選清單：昨日成交量前 {len(candidates)} 名")
+
+        # 抓即時成交量重新排序
+        updated = get_realtime_volume(candidates)
+        top = updated[:MAX_STOCKS]
+        print(f"   📊 即時成交量前 {len(top)} 名，最高: {top[0]['code']} {top[0]['name']} ({top[0]['volume']:,} 張)")
         return top
 
     # 備援
