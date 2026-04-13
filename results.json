@@ -1,9 +1,9 @@
 {
-  "scan_time": "2026-04-13 11:03:31",
+  "scan_time": "2026-04-13 12:29:22",
   "scan_date": "2026-04-13",
   "total_scanned": 500,
-  "matched_strategy1": 9,
-  "matched_strategy2": 3,
+  "matched_strategy1": 15,
+  "matched_strategy2": 6,
   "strategy1": [
     {
       "code": "2408",
@@ -78,6 +78,18 @@
       "strategy": 1
     },
     {
+      "code": "3490",
+      "name": "單井",
+      "price": 28.7,
+      "volume": 7541298,
+      "momentum": 0.0632,
+      "prev_mom": 0.05,
+      "ts": 26.25,
+      "date": "2026-04-13",
+      "market": "上櫃",
+      "strategy": 1
+    },
+    {
       "code": "1313",
       "name": "聯成",
       "price": 12.8,
@@ -87,6 +99,18 @@
       "ts": 11.75,
       "date": "2026-04-13",
       "market": "上市",
+      "strategy": 1
+    },
+    {
+      "code": "5452",
+      "name": "佶優",
+      "price": 34.8,
+      "volume": 4151660,
+      "momentum": -0.2799,
+      "prev_mom": -0.299,
+      "ts": 31.9,
+      "date": "2026-04-13",
+      "market": "上櫃",
       "strategy": 1
     },
     {
@@ -112,6 +136,54 @@
       "date": "2026-04-13",
       "market": "上市",
       "strategy": 1
+    },
+    {
+      "code": "3071",
+      "name": "協禧",
+      "price": 30.0,
+      "volume": 2603507,
+      "momentum": -0.0982,
+      "prev_mom": -0.1099,
+      "ts": 27.6,
+      "date": "2026-04-13",
+      "market": "上櫃",
+      "strategy": 1
+    },
+    {
+      "code": "6125",
+      "name": "廣運",
+      "price": 54.0,
+      "volume": 2325720,
+      "momentum": -0.3953,
+      "prev_mom": -0.4129,
+      "ts": 51.8,
+      "date": "2026-04-13",
+      "market": "上櫃",
+      "strategy": 1
+    },
+    {
+      "code": "2745",
+      "name": "五福",
+      "price": 108.5,
+      "volume": 2120016,
+      "momentum": 0.2182,
+      "prev_mom": 0.1652,
+      "ts": 98.5,
+      "date": "2026-04-13",
+      "market": "上櫃",
+      "strategy": 1
+    },
+    {
+      "code": "4716",
+      "name": "大立",
+      "price": 15.75,
+      "volume": 1841993,
+      "momentum": 0.027,
+      "prev_mom": 0.0043,
+      "ts": 14.35,
+      "date": "2026-04-13",
+      "market": "上櫃",
+      "strategy": 1
     }
   ],
   "strategy2": [
@@ -129,6 +201,19 @@
       "strategy": 2
     },
     {
+      "code": "3339",
+      "name": "泰谷",
+      "price": 51.1,
+      "volume": 9219118,
+      "momentum": 0.3119,
+      "prev_mom": 0.265,
+      "prev2_mom": 0.2955,
+      "change_pct": 9.89,
+      "ts": 46.45,
+      "date": "2026-04-13",
+      "strategy": 2
+    },
+    {
       "code": "2472",
       "name": "立隆電",
       "price": 162.5,
@@ -142,6 +227,19 @@
       "strategy": 2
     },
     {
+      "code": "8383",
+      "name": "千附",
+      "price": 53.0,
+      "volume": 4933396,
+      "momentum": 0.0609,
+      "prev_mom": 0.0122,
+      "prev2_mom": 0.0166,
+      "change_pct": 8.72,
+      "ts": 48.35,
+      "date": "2026-04-13",
+      "strategy": 2
+    },
+    {
       "code": "3704",
       "name": "合勤控",
       "price": 36.65,
@@ -151,6 +249,19 @@
       "prev2_mom": 0.0442,
       "change_pct": 9.24,
       "ts": 33.45,
+      "date": "2026-04-13",
+      "strategy": 2
+    },
+    {
+      "code": "6821",
+      "name": "聯寶",
+      "price": 64.9,
+      "volume": 1859423,
+      "momentum": 0.7361,
+      "prev_mom": 0.6924,
+      "prev2_mom": 0.6952,
+      "change_pct": 10.0,
+      "ts": 57.2,
       "date": "2026-04-13",
       "strategy": 2
     }
