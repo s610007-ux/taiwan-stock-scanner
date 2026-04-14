@@ -593,10 +593,11 @@ def analyze_stock(code, name, market=''):
                 "strategy": 1,
             }
 
-        # ── 策略二：漲幅 ≥ 8% + Squeeze 今 > 昨 + 今日昨日都是正值 ──
-        if (mom_t0 is not None and mom_t1 is not None
-                and mom_t0 > 0 and mom_t1 > 0          # 今、昨都是正值
-                and mom_t0 > mom_t1):                   # 今 > 昨（上升）
+        # ── 策略二：漲幅 ≥ 8% + Squeeze 昨日是低點反轉 + 今昨前天都是正值 ──
+        if (mom_t0 is not None and mom_t1 is not None and mom_t2 is not None
+                and mom_t0 > 0 and mom_t1 > 0 and mom_t2 > 0  # 今、昨、前天都是正值
+                and mom_t0 > mom_t1                            # 今 > 昨（上升）
+                and mom_t1 < mom_t2):                          # 昨 < 前天（昨是低點）
             prev_close = float(close.iloc[-2])
             change_pct = (price - prev_close) / prev_close if prev_close > 0 else 0
             if change_pct >= SURGE_THRESHOLD:
@@ -609,6 +610,7 @@ def analyze_stock(code, name, market=''):
                     "change_pct": round(change_pct * 100, 2),
                     "ts":         round(float(trailing_stop.iloc[-1]), 2),
                     "date":       date_str,
+                    "market":     market,
                     "strategy":   2,
                 }
 
