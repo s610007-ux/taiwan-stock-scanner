@@ -242,7 +242,7 @@
   <!-- 策略一 -->
   <div class="tab-panel active" id="panel1">
     <div class="strategy-desc s1">
-      <span>策略一：UT Bot Alerts 出現買入訊號</span>，且 Squeeze Momentum <span>今日數值 > 昨日數值</span>（動量持續上升）
+      <span>策略一：UT Bot Alerts 出現買入訊號</span>，且 Squeeze Momentum <span>今日 > 昨日</span>（動量上升），且今日數值為<span>負值</span>（零軸下方回升）
     </div>
     <div class="section-header">
       <div class="section-title">符合條件股票</div>
@@ -254,7 +254,7 @@
   <!-- 策略二 -->
   <div class="tab-panel" id="panel2">
     <div class="strategy-desc s2">
-      <span>策略二：當日漲幅 ≥ 8%</span>，且 Squeeze Momentum <span>今日 > 昨日</span>（動量反轉向上），昨日 < 前天（昨日是低點），<span>今日與昨日數值皆為正值</span>
+      <span>策略二：當日漲幅 ≥ 8%</span>，且 Squeeze Momentum <span>今日 > 昨日</span>（動量上升），<span>今日與昨日數值皆為正值</span>（零軸上方）
     </div>
     <div class="section-header">
       <div class="section-title s2">符合條件股票</div>
@@ -293,10 +293,11 @@ function renderS1(data) {
   const rows = data.map(d => {
     const cls = d.momentum >= 0 ? 'pos' : 'neg';
     const bar = maxMom > 0 ? Math.round(Math.abs(d.momentum)/maxMom*100) : 0;
-    const tv  = `https://tw.tradingview.com/chart/?symbol=TWSE:${d.code}`;
+    const market = d.market === '上櫃' ? 'TPEX' : 'TWSE';
+    const tv  = `https://tw.tradingview.com/chart/?symbol=${market}:${d.code}`;
     return `<tr onclick="window.open('${tv}','_blank')">
       <td><span class="code-cell">${d.code}</span></td>
-      <td><span class="name-cell">${d.name}</span></td>
+      <td><span class="name-cell">${d.name}</span><br><span style="font-size:10px;color:var(--dim)">${d.market||''}</span></td>
       <td><span class="price-cell">${d.price.toFixed(2)}</span></td>
       <td><span class="signal-badge"><span class="signal-dot"></span>BUY</span></td>
       <td><div class="mom-bar-wrap">
@@ -338,11 +339,12 @@ function renderS2(data) {
   const rows = data.map(d => {
     const cls   = d.momentum >= 0 ? 'pos' : 'neg';
     const bar   = maxMom > 0 ? Math.round(Math.abs(d.momentum)/maxMom*100) : 0;
-    const tv    = `https://tw.tradingview.com/chart/?symbol=TWSE:${d.code}`;
+    const market = d.market === '上櫃' ? 'TPEX' : 'TWSE';
+    const tv    = `https://tw.tradingview.com/chart/?symbol=${market}:${d.code}`;
     const surge = d.change_pct >= 9.5;
     return `<tr onclick="window.open('${tv}','_blank')">
       <td><span class="code-cell">${d.code}</span></td>
-      <td><span class="name-cell">${d.name}</span></td>
+      <td><span class="name-cell">${d.name}</span><br><span style="font-size:10px;color:var(--dim)">${d.market||''}</span></td>
       <td><span class="price-cell">${d.price.toFixed(2)}</span></td>
       <td><span class="change-badge ${surge?'surge':''}">▲ ${d.change_pct}%</span></td>
       <td><div class="mom-bar-wrap">
