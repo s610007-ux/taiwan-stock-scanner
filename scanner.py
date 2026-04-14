@@ -577,10 +577,11 @@ def analyze_stock(code, name, market=''):
         result_s1 = None
         result_s2 = None
 
-        # ── 策略一：UT Bot 買入 + Squeeze 今 > 昨 ──
+        # ── 策略一：UT Bot 買入 + Squeeze 今 > 昨 + 今日為負值 ──
         if (mom_t0 is not None and mom_t1 is not None
                 and bool(buy_signal.iloc[-1])
-                and mom_t0 > mom_t1):
+                and mom_t0 > mom_t1
+                and mom_t0 < 0):
             result_s1 = {
                 "code":     code, "name": name,
                 "price":    price, "volume": volume,
@@ -592,11 +593,10 @@ def analyze_stock(code, name, market=''):
                 "strategy": 1,
             }
 
-        # ── 策略二：漲幅 ≥ 8% + Squeeze 反轉向上 + 正值 ──
-        if (mom_t0 is not None and mom_t1 is not None and mom_t2 is not None
+        # ── 策略二：漲幅 ≥ 8% + Squeeze 今 > 昨 + 今日昨日都是正值 ──
+        if (mom_t0 is not None and mom_t1 is not None
                 and mom_t0 > 0 and mom_t1 > 0          # 今、昨都是正值
-                and mom_t0 > mom_t1                     # 今 > 昨（上升）
-                and mom_t1 < mom_t2):                   # 昨 < 前天（昨是低點，反轉）
+                and mom_t0 > mom_t1):                   # 今 > 昨（上升）
             prev_close = float(close.iloc[-2])
             change_pct = (price - prev_close) / prev_close if prev_close > 0 else 0
             if change_pct >= SURGE_THRESHOLD:
