@@ -1,16 +1,53 @@
 {
-  "scan_time": "2026-10-15 04:38:00",
+  "scan_time": "2026-10-15 09:42:17",
   "scan_date": "2026-10-15",
   "total_scanned": 500,
-  "matched_strategy1": 0,
+  "matched_strategy1": 3,
   "matched_strategy2": 2,
-  "strategy1": [],
+  "strategy1": [
+    {
+      "code": "9914",
+      "name": "美利達",
+      "price": 68.6,
+      "volume": 3369804,
+      "momentum": -0.0831,
+      "prev_mom": -0.9621,
+      "ts": 66.56,
+      "date": "2026-10-15",
+      "market": "上市",
+      "strategy": 1
+    },
+    {
+      "code": "1210",
+      "name": "大成",
+      "price": 51.8,
+      "volume": 2129985,
+      "momentum": -0.4912,
+      "prev_mom": -0.5392,
+      "ts": 51.3,
+      "date": "2026-10-15",
+      "market": "上市",
+      "strategy": 1
+    },
+    {
+      "code": "2905",
+      "name": "三商",
+      "price": 17.85,
+      "volume": 1426657,
+      "momentum": -0.8458,
+      "prev_mom": -0.8568,
+      "ts": 17.5,
+      "date": "2026-10-15",
+      "market": "上市",
+      "strategy": 1
+    }
+  ],
   "strategy2": [
     {
       "code": "2033",
       "name": "佳大",
       "price": 54.4,
-      "volume": 3173734,
+      "volume": 3248885,
       "momentum": 13.4199,
       "prev_mom": 13.3542,
       "prev2_mom": 13.8008,
@@ -24,7 +61,7 @@
       "code": "6925",
       "name": "意藍",
       "price": 82.3,
-      "volume": 1637568,
+      "volume": 1674134,
       "momentum": 11.9133,
       "prev_mom": 11.4435,
       "prev2_mom": 12.3087,
