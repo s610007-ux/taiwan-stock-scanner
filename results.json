@@ -1,18 +1,18 @@
 {
-  "scan_time": "2026-10-19 05:08:02",
+  "scan_time": "2026-10-19 10:39:34",
   "scan_date": "2026-10-19",
   "total_scanned": 500,
   "matched_strategy1": 1,
-  "matched_strategy2": 3,
+  "matched_strategy2": 1,
   "strategy1": [
     {
-      "code": "1528",
-      "name": "恩德",
-      "price": 25.3,
-      "volume": 7518884,
-      "momentum": -1.3619,
-      "prev_mom": -1.3676,
-      "ts": 23.88,
+      "code": "7786",
+      "name": "東方風能",
+      "price": 125.0,
+      "volume": 1082084,
+      "momentum": -0.3786,
+      "prev_mom": -1.2759,
+      "ts": 121.67,
       "date": "2026-10-19",
       "market": "上市",
       "strategy": 1
@@ -23,7 +23,7 @@
       "code": "4960",
       "name": "誠美材",
       "price": 27.8,
-      "volume": 18693785,
+      "volume": 19169721,
       "momentum": 2.0499,
       "prev_mom": 1.8481,
       "prev2_mom": 1.9616,
@@ -31,34 +31,6 @@
       "ts": 26.37,
       "date": "2026-10-19",
       "market": "上市",
-      "strategy": 2
-    },
-    {
-      "code": "4542",
-      "name": "科嶠",
-      "price": 393.5,
-      "volume": 4170752,
-      "momentum": 42.1757,
-      "prev_mom": 41.0298,
-      "prev2_mom": 44.872,
-      "change_pct": 9.92,
-      "ts": 366.08,
-      "date": "2026-10-19",
-      "market": "上櫃",
-      "strategy": 2
-    },
-    {
-      "code": "8074",
-      "name": "鉅橡",
-      "price": 61.1,
-      "volume": 2440524,
-      "momentum": 4.5594,
-      "prev_mom": 3.7844,
-      "prev2_mom": 3.9405,
-      "change_pct": 9.89,
-      "ts": 58.25,
-      "date": "2026-10-19",
-      "market": "上櫃",
       "strategy": 2
     }
   ]
