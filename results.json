@@ -1,9 +1,9 @@
 {
-  "scan_time": "2026-10-20 07:59:03",
+  "scan_time": "2026-10-20 09:53:34",
   "scan_date": "2026-10-20",
   "total_scanned": 500,
   "matched_strategy1": 1,
-  "matched_strategy2": 2,
+  "matched_strategy2": 3,
   "strategy1": [
     {
       "code": "6224",
@@ -43,6 +43,20 @@
       "prev2_mom": 32.5614,
       "change_pct": 9.84,
       "ts": 249.78,
+      "date": "2026-10-20",
+      "market": "上櫃",
+      "strategy": 2
+    },
+    {
+      "code": "6167",
+      "name": "久正",
+      "price": 11.3,
+      "volume": 985344,
+      "momentum": 0.216,
+      "prev_mom": 0.1015,
+      "prev2_mom": 0.1624,
+      "change_pct": 9.71,
+      "ts": 11.08,
       "date": "2026-10-20",
       "market": "上櫃",
       "strategy": 2
