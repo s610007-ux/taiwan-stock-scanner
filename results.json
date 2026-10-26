@@ -1,85 +1,9 @@
 {
-  "scan_time": "2026-10-23 09:49:11",
-  "scan_date": "2026-10-23",
+  "scan_time": "2026-10-26 10:51:24",
+  "scan_date": "2026-10-26",
   "total_scanned": 500,
-  "matched_strategy1": 5,
-  "matched_strategy2": 1,
-  "strategy1": [
-    {
-      "code": "5202",
-      "name": "力新",
-      "price": 15.55,
-      "volume": 7268651,
-      "momentum": -0.0577,
-      "prev_mom": -0.2855,
-      "ts": 14.73,
-      "date": "2026-10-22",
-      "market": "上櫃",
-      "strategy": 1
-    },
-    {
-      "code": "5426",
-      "name": "振發",
-      "price": 30.3,
-      "volume": 5133060,
-      "momentum": -0.4391,
-      "prev_mom": -0.8819,
-      "ts": 29.07,
-      "date": "2026-10-22",
-      "market": "上櫃",
-      "strategy": 1
-    },
-    {
-      "code": "8240",
-      "name": "華宏",
-      "price": 55.1,
-      "volume": 3870199,
-      "momentum": -4.3137,
-      "prev_mom": -4.4087,
-      "ts": 52.53,
-      "date": "2026-10-22",
-      "market": "上櫃",
-      "strategy": 1
-    },
-    {
-      "code": "2838",
-      "name": "聯邦銀",
-      "price": 20.5,
-      "volume": 1205633,
-      "momentum": -0.6147,
-      "prev_mom": -0.7581,
-      "ts": 20.17,
-      "date": "2026-10-22",
-      "market": "上市",
-      "strategy": 1
-    },
-    {
-      "code": "4108",
-      "name": "懷特",
-      "price": 11.85,
-      "volume": 1138401,
-      "momentum": -0.0767,
-      "prev_mom": -0.1265,
-      "ts": 11.53,
-      "date": "2026-10-22",
-      "market": "上市",
-      "strategy": 1
-    }
-  ],
-  "strategy2": [
-    {
-      "code": "6221",
-      "name": "晉泰",
-      "price": 36.4,
-      "volume": 2045546,
-      "momentum": 1.6975,
-      "prev_mom": 1.5324,
-      "prev2_mom": 1.9197,
-      "change_pct": 9.97,
-      "ts": 34.16,
-      "date": "2026-10-22",
-      "market": "上櫃",
-      "strategy": 2
-    }
-  ]
+  "matched_strategy1": 0,
+  "matched_strategy2": 0,
+  "strategy1": [],
+  "strategy2": []
 }
