@@ -1,22 +1,9 @@
 {
-  "scan_time": "2026-11-16 13:27:24",
-  "scan_date": "2026-11-16",
+  "scan_time": "2026-11-17 14:12:40",
+  "scan_date": "2026-11-17",
   "total_scanned": 500,
-  "matched_strategy1": 1,
+  "matched_strategy1": 0,
   "matched_strategy2": 0,
-  "strategy1": [
-    {
-      "code": "1229",
-      "name": "聯華",
-      "price": 39.25,
-      "volume": 4480527,
-      "momentum": -1.5068,
-      "prev_mom": -1.8302,
-      "ts": 38.46,
-      "date": "2026-11-16",
-      "market": "上市",
-      "strategy": 1
-    }
-  ],
+  "strategy1": [],
   "strategy2": []
 }
