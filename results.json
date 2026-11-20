@@ -1,22 +1,35 @@
 {
-  "scan_time": "2026-11-19 14:13:06",
-  "scan_date": "2026-11-19",
+  "scan_time": "2026-11-20 13:54:22",
+  "scan_date": "2026-11-20",
   "total_scanned": 500,
-  "matched_strategy1": 0,
+  "matched_strategy1": 1,
   "matched_strategy2": 1,
-  "strategy1": [],
+  "strategy1": [
+    {
+      "code": "1584",
+      "name": "精剛",
+      "price": 16.3,
+      "volume": 2114392,
+      "momentum": -0.4067,
+      "prev_mom": -0.5268,
+      "ts": 15.63,
+      "date": "2026-11-20",
+      "market": "上櫃",
+      "strategy": 1
+    }
+  ],
   "strategy2": [
     {
-      "code": "6782",
-      "name": "視陽",
-      "price": 290.5,
-      "volume": 2159401,
-      "momentum": 7.1832,
-      "prev_mom": 4.4796,
-      "prev2_mom": 6.9468,
-      "change_pct": 9.01,
-      "ts": 274.59,
-      "date": "2026-11-19",
+      "code": "7765",
+      "name": "中華資安",
+      "price": 294.5,
+      "volume": 8574881,
+      "momentum": 25.7846,
+      "prev_mom": 20.9657,
+      "prev2_mom": 20.9982,
+      "change_pct": 9.89,
+      "ts": 274.96,
+      "date": "2026-11-20",
       "market": "上市",
       "strategy": 2
     }
